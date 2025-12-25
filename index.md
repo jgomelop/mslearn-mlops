@@ -17,3 +17,6 @@ To complete these exercises, you’ll need a Microsoft Azure subscription. If yo
 | --- | --- | 
 {% for activity in challenge  %}| {{ activity.challenge.module }} | [{{ activity.challenge.challenge }}{% if activity.challenge.type %} - {{ activity.challenge.type }}{% endif %}]({{ site.github.url }}{{ activity.url }}) |
 {% endfor %}
+
+## Python version
+Requiere python 3.8
