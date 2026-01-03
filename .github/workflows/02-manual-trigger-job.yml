@@ -1,3 +1,4 @@
+# El resource group y el workspace ya fueron configurados en el entorno lcoal.
 name: Manually trigger an Azure Machine Learning job
 
 on:
@@ -5,15 +6,17 @@ on:
 
 jobs:
   train:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - name: Check out repo
       uses: actions/checkout@main
+    
+    - name: Verify Azure Login
+      run: az account show
+    
     - name: Install az ml extension
       run: az extension add -n ml -y
-    - name: Azure login
-      uses: azure/login@v1
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
-
-
+      continue-on-error: true
+    
+    - name: Submit Training Job
+      run: az ml job create --file src/job.yml
