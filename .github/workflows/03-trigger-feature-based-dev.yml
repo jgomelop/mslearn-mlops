@@ -6,8 +6,32 @@ on:
       - main
 
 jobs:
-  main:
+  python_prep:
+    name: linting
     runs-on: self-hosted
     steps:
-    - name: Print to console
-      run:  echo "Will add code checks here in next challenge"
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Use Python version 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.8'
+  linting:
+    runs-on: self-hosted
+    steps:
+    - name: Install Flake8
+      run: |
+        python -m pip install flake8
+    - name: Run linting tests
+      run: | 
+        flake8 src/model/
+  unit_testing:
+    runs-on: self-hosted
+    name: Unit testing
+    steps: 
+      - name: Install pytest
+        run: |
+          python -m pip install pytest
+      - name: Run unit tests
+        run: | 
+          pytest .
