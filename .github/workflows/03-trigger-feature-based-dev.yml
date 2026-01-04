@@ -1,4 +1,4 @@
-name: Feature-based development with GitHub Actions
+name: Linting and Unit Testing checks
 
 on:
   pull_request:
