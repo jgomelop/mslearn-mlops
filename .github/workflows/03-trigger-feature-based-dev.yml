@@ -1,7 +1,7 @@
 name: Trigger to test Feature-based development with GiHub Actions
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
