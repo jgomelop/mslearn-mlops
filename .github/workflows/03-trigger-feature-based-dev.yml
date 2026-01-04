@@ -1,4 +1,4 @@
-name: Trigger to test Feature-based development with GiHub Actions
+name: Feature-based development with GitHub Actions
 
 on:
   pull_request:
@@ -6,32 +6,38 @@ on:
       - main
 
 jobs:
-  python_prep:
-    name: linting
-    runs-on: self-hosted
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
     steps:
     - name: Check out repo
-      uses: actions/checkout@main
-    - name: Use Python version 3.8
-      uses: actions/setup-python@v3
+      uses: actions/checkout@v4
+    
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
       with:
         python-version: '3.8'
-  linting:
-    runs-on: self-hosted
-    steps:
+    
     - name: Install Flake8
-      run: |
-        python -m pip install flake8
+      run: python -m pip install flake8
+    
     - name: Run linting tests
-      run: | 
-        flake8 src/model/
+      run: flake8 src/model/
+
   unit_testing:
-    runs-on: self-hosted
     name: Unit testing
+    runs-on: ubuntu-latest
     steps: 
-      - name: Install pytest
-        run: |
-          python -m pip install pytest
-      - name: Run unit tests
-        run: | 
-          pytest .
+    - name: Check out repo
+      uses: actions/checkout@v4
+    
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+    
+    - name: Install pytest
+      run: python -m pip install pytest
+    
+    - name: Run unit tests
+      run: pytest .
