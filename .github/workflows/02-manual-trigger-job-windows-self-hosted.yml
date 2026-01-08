@@ -20,6 +20,6 @@ jobs:
     
     - name: Submit Training Job
       run: az ml job create ` 
-        --file src\job.yml `
+        --file src/job.yml `
         --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} `
         --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }} 
