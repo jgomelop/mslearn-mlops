@@ -48,9 +48,10 @@ jobs:
         run: az extension add -n ml -y
 
       - name: Run Azure ML production job
+        # Self-host es windows, por lo que separador de línea debe ser de Powershell
         run: |
-          az ml job create \
-            --file jobs/train-prod.yml \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }} \
+          az ml job create `  
+            --file jobs/train-prod.yml `
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} `
+            --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }} `
             --stream
