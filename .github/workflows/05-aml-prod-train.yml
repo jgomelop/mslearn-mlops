@@ -24,10 +24,10 @@ jobs:
 
       - name: Run Azure ML experiment job
         run: |
-          az ml job create \
-            --file jobs/train-dev.yml \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }} \
+          az ml job create `
+            --file jobs/train-dev.yml `
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} `
+            --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }} `
             --stream
   production:
     name: Production training (PROD)
