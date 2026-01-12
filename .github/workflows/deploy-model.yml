@@ -1,0 +1,50 @@
+name: Deploy MLflow Model to Azure ML
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - production
+        default: 'dev'
+      model_version:
+        description: 'Model version (leave empty for latest)'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: ${{ github.event.inputs.environment }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set environment variables
+        shell: pwsh
+        run: |
+          echo "RESOURCE_GROUP=${{ secrets.AZURE_RESOURCE_GROUP }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "WORKSPACE_NAME=${{ secrets.AZURE_WORKSPACE_NAME }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "ENVIRONMENT=${{ github.event.inputs.environment }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "MODEL_VERSION=${{ github.event.inputs.model_version }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Create endpoint
+        shell: pwsh
+        run: |
+          .\.github\scripts\create-endpoint.ps1
+
+      - name: Deploy model to endpoint
+        shell: pwsh
+        run: |
+          .\.github\scripts\deploy-model.ps1
+
+      - name: Test endpoint
+        shell: pwsh
+        run: |
+          .\.github\scripts\test-endpoint.ps1
