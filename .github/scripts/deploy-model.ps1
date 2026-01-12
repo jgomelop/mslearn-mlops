@@ -23,17 +23,21 @@ if ([string]::IsNullOrEmpty($env:MODEL_VERSION)) {
     Write-Host "Using specified model version: $MODEL_VERSION"
 }
 
-# Read deployment template
-$deploymentContent = Get-Content -Path "deploy/deployment.yml" -Raw
+# Create deployment YAML content directly
+$deploymentYaml = @"
+`$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: $DEPLOYMENT_NAME
+endpoint_name: $ENDPOINT_NAME
+model: azureml:${MODEL_NAME}:${MODEL_VERSION}
+instance_type: Standard_DS2_v2
+instance_count: 1
+"@
 
-# Replace placeholders
-$deploymentContent = $deploymentContent -replace "{{ENDPOINT_NAME}}", $ENDPOINT_NAME
-$deploymentContent = $deploymentContent -replace "{{DEPLOYMENT_NAME}}", $DEPLOYMENT_NAME
-$deploymentContent = $deploymentContent -replace "{{MODEL_NAME}}", $MODEL_NAME
-$deploymentContent = $deploymentContent -replace "{{MODEL_VERSION}}", $MODEL_VERSION
+# Save deployment file
+$deploymentYaml | Set-Content -Path "deploy/deployment-temp.yml"
 
-# Save updated deployment file
-$deploymentContent | Set-Content -Path "deploy/deployment-temp.yml"
+Write-Host "Deployment configuration:"
+Write-Host $deploymentYaml
 
 # Create or update deployment
 Write-Host "Creating deployment with model ${MODEL_NAME}:${MODEL_VERSION}..."
@@ -42,6 +46,12 @@ az ml online-deployment create `
   --workspace-name $env:WORKSPACE_NAME `
   --file deploy/deployment-temp.yml `
   --all-traffic
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Deployment failed with exit code $LASTEXITCODE"
+    Remove-Item "deploy/deployment-temp.yml" -ErrorAction SilentlyContinue
+    exit 1
+}
 
 Write-Host "Model deployed successfully to $ENDPOINT_NAME"
 
