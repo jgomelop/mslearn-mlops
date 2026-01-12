@@ -9,8 +9,8 @@ inputs:
   training_data: 
     type: uri_folder 
     path: azureml:diabetes-dev-folder:1
-  reg_rate: 0.05
-environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+  reg_rate: 0.01
+environment: azureml:diabetes-model-env:1
 compute: azureml:cpu-cluster
 experiment_name: diabetes-training-experiment
 description: Training diabetes model from GitHub Actions
