@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set environment variables
-        shell: pwsh
+        shell: powershell
         run: |
           echo "RESOURCE_GROUP=${{ secrets.AZURE_RESOURCE_GROUP }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           echo "WORKSPACE_NAME=${{ secrets.AZURE_WORKSPACE_NAME }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -35,16 +35,16 @@ jobs:
           echo "MODEL_VERSION=${{ github.event.inputs.model_version }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Create endpoint
-        shell: pwsh
+        shell: powershell
         run: |
           .\.github\scripts\create-endpoint.ps1
 
       - name: Deploy model to endpoint
-        shell: pwsh
+        shell: powershell
         run: |
           .\.github\scripts\deploy-model.ps1
 
       - name: Test endpoint
-        shell: pwsh
+        shell: powershell
         run: |
           .\.github\scripts\test-endpoint.ps1
