@@ -1,18 +1,11 @@
 name: ms-mlops-py39
 channels:
   - conda-forge
+  - defaults
 dependencies:
   - python=3.9
-  - pip
-  - pip:
-    # Core packages (from your working environment)
-    - mlflow==3.1.4
-    - pandas==2.3.1
-    - scikit-learn==1.6.1
-    
-    # Azure ML integration
-    - azureml-mlflow==1.54.0
-    - azureml-defaults==1.54.0
-    
-    # Deployment support
-    - inference-schema[numpy-support]==1.5.1
+  - mlflow=2.7.1
+  - pandas=1.5.3
+  - pytest
+  - scikit-learn=1.3.2
+  - pipreqs
