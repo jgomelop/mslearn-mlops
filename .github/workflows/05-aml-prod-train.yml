@@ -1,9 +1,9 @@
 name: Azure ML Dev to Prod Training
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
