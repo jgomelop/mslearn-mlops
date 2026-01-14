@@ -1,0 +1,8 @@
+-r requirements.txt
+pytest==8.4.1
+pytest-cov
+pytest-mock
+black
+flake8
+mypy
+pipreqs

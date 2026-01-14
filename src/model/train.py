@@ -7,18 +7,20 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
 
-# define functions
 def main(args):
     mlflow.autolog()
-
+    
+    # Log custom parameters
+    mlflow.log_param("reg_rate", args.reg_rate)
+    
     # read data
     df = get_csvs_df(args.training_data)
-
+    
     # split data
     X_train, X_test, y_train, y_test = split_data(df)
-
+    
     # train model
-    train_model(args.reg_rate, X_train, X_test, y_train, y_test)
+    model = train_model(args.reg_rate, X_train, X_test, y_train, y_test)
 
 
 def get_csvs_df(path):
@@ -53,6 +55,10 @@ def split_data(df):
 def train_model(reg_rate, X_train, X_test, y_train, y_test):
     # train model
     model = LogisticRegression(C=1 / reg_rate, solver="liblinear").fit(X_train, y_train)
+    
+    # Evaluate to trigger autolog metrics
+    accuracy = model.score(X_test, y_test)
+    
     return model
 
 
