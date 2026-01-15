@@ -31,90 +31,64 @@ class XRayDataset(Dataset):
         return len(self.df)
     
     def __getitem__(self, idx):
-        # Get image path
         img_name = self.df.loc[idx, 'image_path']
         img_path = f"{self.img_dir}/{img_name}"
-        
-        # Load image
-        img = Image.open(img_path).convert('L')
+
+        img = Image.open(img_path).convert("L")
         img = np.array(img)
-        
-        # Apply transforms
+
+        # center crop to square
+        h, w = img.shape
+        m = min(h, w)
+        img = img[(h - m)//2:(h - m)//2 + m,
+                  (w - m)//2:(w - m)//2 + m]
+
+        # resize
         if self.transform:
             img = self.transform(img)
-        
-        # Normalize
+
+        # 🔑 THIS LINE FIXES EVERYTHING
+        if img.ndim == 3:
+            img = img.squeeze()
+
+        # normalize
         img = xrv.datasets.normalize(img, 255)
-        
-        # Convert to tensor
-        if not isinstance(img, torch.Tensor):
-            img = torch.from_numpy(img).unsqueeze(0).float()
-        
-        # Get labels
+
+        # (1, H, W)
+        img = torch.from_numpy(img).float().unsqueeze(0)
+
         labels = self.df.loc[idx, self.label_cols].values.astype(np.float32)
         labels = torch.from_numpy(labels)
-        
+
         return img, labels
 
 
+
 def get_model(model_name, num_classes):
-    """
-    Get pretrained model and modify for specified number of classes
-    
-    Args:
-        model_name: Name of pretrained model
-        num_classes: Number of output classes
-    
-    Returns:
-        Modified model
-    """
-    # Load pretrained model
     model = xrv.models.DenseNet(weights=model_name)
-    
-    # Modify classifier for custom number of classes
+
+    # Replace classifier
     num_ftrs = model.classifier.in_features
     model.classifier = nn.Linear(num_ftrs, num_classes)
-    
+
+    # 🔑 Disable pretrained output normalization (CRITICAL)
+    model.op_threshs = None
+
     return model
 
 
+
 def create_data_loaders(train_df, test_df, img_dir, batch_size, img_size):
-    """
-    Create PyTorch data loaders
-    
-    Args:
-        train_df: Training dataframe
-        test_df: Test dataframe
-        img_dir: Image directory
-        batch_size: Batch size
-        img_size: Image size for resizing
-    
-    Returns:
-        train_loader, test_loader
-    """
-    # Create transform
+    # Only resizer here
     transform = xrv.datasets.XRayResizer(img_size)
-    
-    # Create datasets
+
     train_dataset = XRayDataset(train_df, img_dir, transform=transform)
     test_dataset = XRayDataset(test_df, img_dir, transform=transform)
-    
-    # Create data loaders (num_workers=0 for CPU)
-    train_loader = DataLoader(
-        train_dataset, 
-        batch_size=batch_size, 
-        shuffle=True, 
-        num_workers=0
-    )
-    test_loader = DataLoader(
-        test_dataset, 
-        batch_size=batch_size, 
-        shuffle=False, 
-        num_workers=0
-    )
-    
-    return train_loader, test_loader
 
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    return train_loader, test_loader
 
 def train_epoch(model, train_loader, criterion, optimizer, device):
     """
