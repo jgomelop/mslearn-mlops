@@ -1,0 +1,6 @@
+image_path,Atelectasis,Cardiomegaly,Effusion,Pneumonia,Mass,Nodule,Pneumothorax,Infiltration
+xray_000.png,1,0,1,0,1,0,1,0
+xray_001.png,1,1,0,1,1,0,0,0
+xray_002.png,1,0,1,1,1,1,0,0
+xray_003.png,0,1,0,1,1,0,0,0
+xray_004.png,0,1,1,1,0,0,0,0

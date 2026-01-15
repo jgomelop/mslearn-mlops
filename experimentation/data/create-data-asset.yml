@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/data.schema.json
-name: diabetes-dev-folder
-description: Diabetes-dev Data asset created from folder in cloud.
+name: xray-data-dev-folder
+description: xray-dev Data asset created from folder in cloud.
 type: uri_folder
 path: .

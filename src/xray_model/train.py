@@ -9,8 +9,7 @@ import pandas as pd
 import mlflow
 from sklearn.model_selection import train_test_split
 
-from .model_utils import XRayDataset, get_model, train_loop
-
+from xray_model.model_utils import XRayDataset, get_model, train_loop
 
 def main(args):
     """Main training function"""
