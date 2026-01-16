@@ -6,7 +6,7 @@ extend-ignore =
     D,
     N,
     I
-max-line-length = 88
+max-line-length = 120
 exclude = 
     .tox,
     .git,
