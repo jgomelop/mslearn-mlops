@@ -1,5 +1,8 @@
 $schema: https://azuremlschemas.azureedge.net/latest/data.schema.json
-name: xray-data-dev-folder
+name: xray-data-folder
 description: xray-dev Data asset created from folder in cloud.
 type: uri_folder
-path: .
+tags:
+  tipo: imagenes+csv
+  proyecto: xray
+path: azureml://datastores/blob_training_data/paths/https://pruebacargamuestras.blob.core.windows.net/pruebacargacontainer/data/
