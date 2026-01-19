@@ -41,7 +41,7 @@ class XRayDataset(Dataset):
         # center crop to square
         h, w = img.shape
         m = min(h, w)
-        img = img[(h - m) // 2 : (h - m) // 2 + m, (w - m) // 2 : (w - m) // 2 + m]
+        img = img[(h - m) // 2: (h - m) // 2 + m, (w - m) // 2: (w - m) // 2 + m]
 
         # resize
         if self.transform:

@@ -9,7 +9,6 @@ import os
 import pandas as pd
 import mlflow
 from sklearn.model_selection import train_test_split
-
 from model_utils import get_model, train_loop
 
 
@@ -18,14 +17,26 @@ def main(args):
     # Enable MLflow autologging
     mlflow.autolog()
 
-    # Read data
-    df = get_csvs_df(args.training_data)
+    # Start explicit MLflow run
+    with mlflow.start_run():
+        # Log parameters upfront
+        mlflow.log_param("model_name", args.model_name)
+        mlflow.log_param("batch_size", args.batch_size)
+        mlflow.log_param("num_epochs", args.num_epochs)
+        mlflow.log_param("learning_rate", args.learning_rate)
+        mlflow.log_param("img_size", args.img_size)
 
-    # Split data
-    train_df, test_df = split_data(df)
+        # Read data
+        df = get_csvs_df(args.training_data)
 
-    # Train model
-    train_model(args, train_df, test_df)
+        # Split data
+        train_df, test_df = split_data(df)
+
+        # Train model
+        trained_model = train_model(args, train_df, test_df)
+
+        # Log the model artifact
+        mlflow.pytorch.log_model(pytorch_model=trained_model, artifact_path="model")
 
 
 def get_csvs_df(path):
@@ -70,10 +81,15 @@ def train_model(args, train_df, test_df):
     print(f"Number of classes: {num_classes}")
     print(f"Classes: {label_cols}")
 
+    # Log additional parameters
+    mlflow.log_param("num_classes", num_classes)
+    mlflow.log_param("train_samples", len(train_df))
+    mlflow.log_param("test_samples", len(test_df))
+
     # Get model
     model = get_model(model_name=args.model_name, num_classes=num_classes)
 
-    # Train model
+    # Train model (no mlflow.start_run here!)
     trained_model = train_loop(
         model=model,
         train_df=train_df,
