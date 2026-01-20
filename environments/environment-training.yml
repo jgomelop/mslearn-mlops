@@ -1,6 +1,0 @@
-$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
-name: pytorch-xray-training
-version: '1.0.1'
-description: Training environment for PyTorch X-ray classification with MLflow 2.7.1
-image: mcr.microsoft.com/azureml/curated/acpt-pytorch-2.8-cuda12.6:3
-conda_file: conda-training.yml

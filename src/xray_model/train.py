@@ -9,13 +9,16 @@ import os
 import pandas as pd
 import mlflow
 from sklearn.model_selection import train_test_split
+import torch
 from model_utils import get_model, train_loop
+
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 
 def main(args):
     """Main training function"""
-    # Enable MLflow autologging
-    mlflow.autolog()
+    # We'll log artifacts manually
+    mlflow.autolog(log_models=False)
 
     # Start explicit MLflow run
     with mlflow.start_run():
@@ -36,7 +39,14 @@ def main(args):
         trained_model = train_model(args, train_df, test_df)
 
         # Log the model artifact
-        mlflow.pytorch.log_model(pytorch_model=trained_model, artifact_path="model")
+        os.makedirs("outputs/model", exist_ok=True)
+        model_path = "outputs/model/model.pt"
+
+        torch.save(trained_model.state_dict(), model_path)
+        mlflow.log_artifact(model_path)
+
+        mlflow.log_param("model_framework", "pytorch")
+        mlflow.log_param("device", "cpu")
 
 
 def get_csvs_df(path):

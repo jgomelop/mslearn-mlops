@@ -1,0 +1,6 @@
+$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
+name: xray-cpu-training-env
+version: 1
+description: CPU-only environment for X-ray training with PyTorch + MLflow
+image: mcr.microsoft.com/azureml/minimal-ubuntu22.04-py310-cpu
+conda_file: training-env.yml
