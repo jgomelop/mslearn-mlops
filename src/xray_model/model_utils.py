@@ -43,15 +43,12 @@ class XRayDataset(Dataset):
         m = min(h, w)
         img = img[(h - m) // 2: (h - m) // 2 + m, (w - m) // 2: (w - m) // 2 + m]
 
-        # resize
         if self.transform:
             img = self.transform(img)
 
-        # 🔑 THIS LINE FIXES EVERYTHING
         if img.ndim == 3:
             img = img.squeeze()
 
-        # normalize
         img = xrv.datasets.normalize(img, 255)
 
         # (1, H, W)
@@ -66,18 +63,16 @@ class XRayDataset(Dataset):
 def get_model(model_name, num_classes):
     model = xrv.models.DenseNet(weights=model_name)
 
-    # Replace classifier
     num_ftrs = model.classifier.in_features
     model.classifier = nn.Linear(num_ftrs, num_classes)
 
-    # 🔑 Disable pretrained output normalization (CRITICAL)
+    # Disable pretrained output normalization (CRITICAL)
     model.op_threshs = None
 
     return model
 
 
 def create_data_loaders(train_df, test_df, img_dir, batch_size, img_size):
-    # Only resizer here
     transform = xrv.datasets.XRayResizer(img_size)
 
     train_dataset = XRayDataset(train_df, img_dir, transform=transform)
@@ -215,5 +210,5 @@ def train_loop(
             f"Epoch {epoch + 1} - Train Loss: {train_loss:.4f}, Test Loss: {test_loss:.4f}"
         )
 
-    print("\n✅ Training completed!")
+    print("\nTraining completed!")
     return model

@@ -8,7 +8,7 @@ inputs:
   training_data: 
     type: uri_folder 
     path: azureml:xray_data_source:1
-environment: azureml:xray-training-cpu:2.4
+environment: azureml:xray-training-cpu:2.5.1
 compute: azureml:cpu-cluster
 experiment_name: xray-model-training-test
 description: Training job for X-ray model
