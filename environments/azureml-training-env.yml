@@ -2,7 +2,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
 
 name: xray-training-cpu
-version: "2.2"
+version: "2.4"
 description: "CPU environment for X-ray training with PyTorch 2.2, Python 3.12, and TorchXRayVision"
 
 # Base image for AML to build on

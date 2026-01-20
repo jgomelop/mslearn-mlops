@@ -8,8 +8,8 @@ inputs:
   training_data: 
     type: uri_folder 
     path: azureml:xray_data_source:1
-environment: azureml://registries/azureml/environments/acpt-pytorch-2.8-cuda12.6/versions/3
+environment: azureml:xray-training-cpu:2.4
 compute: azureml:cpu-cluster
-experiment_name: xray-first-model-training-test
+experiment_name: xray-model-training-test
 description: Training job for X-ray model
-display_name: xray-first-model-training-test
+display_name: xray-model-training-test
