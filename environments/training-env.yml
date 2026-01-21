@@ -1,5 +1,3 @@
-
-name: xray-training-cpu
 channels:
   - conda-forge
 dependencies:
@@ -13,15 +11,15 @@ dependencies:
   - imageio
   - tqdm
   - requests
+  - matplotlib
   - pip:
-      - --extra-index-url https://download.pytorch.org/whl/cpu
-      # PyTorch 2.2.x (CPU)
+      - '--extra-index-url https://download.pytorch.org/whl/cpu'
       - torch==2.2.2
       - torchvision==0.17.2
       - torchaudio==2.2.2
-      # MLflow (cliente <2.8 para evitar /logged-models)
-      - mlflow==2.7.1
-      - azureml-mlflow==1.61.0.post1
-      # Resto de tu stack
+      - azureml-mlflow==1.60.0
+      - azure-ai-ml
+      - azure-identity
       - pydicom
       - torchxrayvision
+name: xray-training-cpu

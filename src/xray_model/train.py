@@ -8,6 +8,7 @@ import glob
 import os
 import pandas as pd
 import mlflow
+import mlflow.pytorch
 from sklearn.model_selection import train_test_split
 import torch
 from model_utils import get_model, train_loop
@@ -102,15 +103,19 @@ def train_model(args, train_df, test_df):
         img_size=args.img_size,
     )
 
-    # Guardar modelo localmente
+    # Guardar modelo localmente (Azure ML automatically uploads 'outputs' folder)
     os.makedirs("outputs", exist_ok=True)
     model_path = "outputs/model.pt"
     torch.save(trained_model.state_dict(), model_path)
     print(f"✓ Model saved to: {model_path}")
-    
-    # Log modelo como artifact en MLflow
-    mlflow.log_artifact(model_path, artifact_path="model")
-    print(f"✓ Model logged to MLflow")
+
+    # Log model using MLflow's PyTorch model logging
+    try:
+        mlflow.pytorch.log_model(trained_model, "model")
+        print(f"✓ Model logged to MLflow using pytorch.log_model")
+    except Exception as e:
+        print(f"⚠ Could not log model to MLflow: {e}")
+        print(f"  Model is still saved locally in outputs folder")
 
     return trained_model
 
