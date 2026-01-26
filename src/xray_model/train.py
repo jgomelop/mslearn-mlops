@@ -18,26 +18,26 @@ os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 def main(args):
     """Main training function"""
-    
+
     # Iniciar run de MLflow
     with mlflow.start_run():
         print("MLflow run iniciado correctamente")
         print(f"Run ID: {mlflow.active_run().info.run_id}")
         print(f"Experiment ID: {mlflow.active_run().info.experiment_id}")
-        
+
         # Log de parámetros básicos
         mlflow.log_param("model_name", args.model_name)
         mlflow.log_param("batch_size", args.batch_size)
         mlflow.log_param("num_epochs", args.num_epochs)
         mlflow.log_param("learning_rate", args.learning_rate)
-        
+
         # Cargar y dividir datos
         df = get_csvs_df(args.training_data)
         train_df, test_df = split_data(df)
-        
+
         # Entrenar modelo
-        trained_model = train_model(args, train_df, test_df)
-        
+        train_model(args, train_df, test_df)
+
         print("✓ Entrenamiento completado exitosamente")
 
 
@@ -69,7 +69,7 @@ def split_data(df):
 
 def train_model(args, train_df, test_df):
     """Train the X-ray classification model"""
-    
+
     # Determinar directorio de imágenes
     img_dir = os.path.join(args.training_data, args.image_folder)
     if not os.path.exists(img_dir):
@@ -112,10 +112,10 @@ def train_model(args, train_df, test_df):
     # Log model using MLflow's PyTorch model logging
     try:
         mlflow.pytorch.log_model(trained_model, "model")
-        print(f"✓ Model logged to MLflow using pytorch.log_model")
+        print("✓ Model logged to MLflow using pytorch.log_model")
     except Exception as e:
         print(f"⚠ Could not log model to MLflow: {e}")
-        print(f"  Model is still saved locally in outputs folder")
+        print("  Model is still saved locally in outputs folder")
 
     return trained_model
 
@@ -153,12 +153,7 @@ def parse_args():
         default=0.001,
         help="Learning rate",
     )
-    parser.add_argument(
-        "--batch_size",
-        type=int,
-        default=4,
-        help="Batch size"
-    )
+    parser.add_argument("--batch_size", type=int, default=4, help="Batch size")
     parser.add_argument(
         "--num_epochs",
         type=int,
