@@ -9,7 +9,7 @@ import os
 import pandas as pd
 import mlflow
 import mlflow.pytorch
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, BaseCrossValidator
 import torch
 from model_utils import get_model, train_loop
 
