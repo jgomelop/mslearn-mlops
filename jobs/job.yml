@@ -5,13 +5,15 @@ display_name: densenet121-res224-all-4epochs-2batch-0_01-lr
 experiment_name: xray-train-xray_data_source-1
 
 # Code and environment
-code: xray_model
+# FIX: Path must be relative to this yaml file (up one level, then into src)
+code: ../src/xray_model
 environment: azureml:xray-training-cpu:4
 
 # Compute target
 compute: azureml:training-cpu-2
 
 # Command to execute
+# Note: 'train.py' is at the root of the uploaded 'code' folder
 command: >-
   python train.py
   --training_data ${{inputs.training_data}}

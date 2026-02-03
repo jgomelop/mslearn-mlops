@@ -1,0 +1,24 @@
+name: xray-inference
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - numpy=1.26.4
+  - pandas
+  - scikit-learn
+  - pillow
+  - scikit-image
+  - imageio
+  - tqdm
+  - requests
+  - pip:
+      # ensures CPU wheels for torch/torchvision/torchaudio
+      - --extra-index-url https://download.pytorch.org/whl/cpu
+      - azureml-inference-server-http>=0.8.0
+      - torch==2.2.2
+      - torchvision==0.17.2
+      - torchaudio==2.2.2
+      - pydicom
+      - torchxrayvision

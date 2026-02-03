@@ -1,0 +1,25 @@
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy=1.26.4
+  - pandas
+  - scikit-learn
+  - pillow
+  - scikit-image
+  - imageio
+  - tqdm
+  - requests
+  - matplotlib
+  - pip:
+      - '--extra-index-url https://download.pytorch.org/whl/cpu'
+      - torch==2.2.2
+      - torchvision==0.17.2
+      - torchaudio==2.2.2
+      - azureml-mlflow==1.60.0
+      - azure-ai-ml
+      - azure-identity
+      - pydicom
+      - torchxrayvision
+name: xray-training-cpu

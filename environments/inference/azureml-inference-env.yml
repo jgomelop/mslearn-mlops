@@ -1,0 +1,12 @@
+
+$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
+name: xray-inference-env
+version: 1
+description: CPU inference environment for X-ray classification (PyTorch 2.2.2 + torchxrayvision)
+
+# You can keep your original base or use an AML curated inference base.
+# This base is stable on Ubuntu 20.04 and works well with PyTorch CPU wheels.
+image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
+
+conda_file: inference-env.yml
+

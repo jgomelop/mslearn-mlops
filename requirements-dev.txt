@@ -1,0 +1,34 @@
+# Core ML stack (CPU Only)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2+cpu
+torchvision==0.17.2+cpu
+torchaudio==2.2.2+cpu
+torchxrayvision
+
+# Support Libraries
+numpy==1.26.4
+pandas
+scikit-learn
+Pillow
+scikit-image
+imageio
+tqdm
+requests
+matplotlib
+
+# Medical imaging
+pydicom
+
+# Azure ML & Experiment tracking
+azureml-mlflow==1.60.0
+azure-ai-ml
+azure-identity
+mlflow
+
+# Development tools
+ipykernel
+
+# Testing dependencies
+pytest>=6.2,<8.0
+pytest-cov>=2.12
+flake8==7.0.0

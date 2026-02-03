@@ -1,0 +1,13 @@
+
+$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
+
+name: xray-training-cpu
+version: "2.5.1"
+description: "CPU environment for X-ray training with PyTorch 2.2, Python 3.11, and TorchXRayVision"
+
+# Base image for AML to build on
+image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+os_type: linux
+
+# Point to the Conda file above (path is relative to this YAML file)
+conda_file: training-env.yml
